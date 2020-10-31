@@ -1,12 +1,12 @@
 # Image Classification Benchmarking
 Codebase for testing new techniques in image classification. Simple to configure dataset, network
 architecture, data augmentations, regularization and more for easy experimentation with newly
-proposed ideas. Everything implemented in Pytorch Lightning.
+proposed ideas. Implemented in Pytorch Lightning.
 
 ## Included Methods
-__Datasets__: CIFAR10 (CIFAR100, Fashion MNIST, KMNIST)
+__Datasets__: CIFAR10, CIFAR100 (Fashion MNIST, KMNIST)
 
-__Architectures__: PreAct ResNet (XResNet)
+__Architectures__: PreAct ResNet, XResNet
 
 __Augmentations__: AutoAugment, Cutout, RandAugment, Augmix, Gridmask
 

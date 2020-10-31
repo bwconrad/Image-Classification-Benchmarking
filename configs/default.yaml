@@ -56,8 +56,6 @@ cutout_n_holes: 1
 
 # Network architecture
 arch: preactresnet18  # preactresnet18 | preactresnet34 | preactresnet50 | preactresnet101 | preactresnet152
-# Number of feature maps in first hidden layer
-initial_channels: 64
 # Weight initialization distribution for convolution and linear layers
 weight_init: normal # normal | xavier | kaiming | orthogonal
 # Standard deviation of normal distribution (weight_init = normal)

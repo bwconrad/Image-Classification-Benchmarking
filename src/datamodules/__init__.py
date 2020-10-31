@@ -2,7 +2,7 @@ import pytorch_lightning as pl
 import torch
 from torch.utils.data import DataLoader
 from torchvision import transforms
-from torchvision.datasets import CIFAR10
+from torchvision.datasets import CIFAR10, CIFAR100
 
 from .cutout import Cutout
 from .gridmask import GridMask
@@ -17,14 +17,14 @@ class CIFAR10DataModule(pl.LightningDataModule):
         self.data_dir = self.hparams.data_path
         self.train_transforms = get_transforms(
             mean=[0.4914, 0.4822, 0.4465],
-            std=[0.2023, 0.1994, 0.2010],
+            std=[0.2470, 0.2435, 0.2616],
             **vars(hparams)
         )
         self.test_transforms = transforms.Compose([
             transforms.Resize(hparams.size),
             transforms.CenterCrop(hparams.size),
             transforms.ToTensor(),
-            transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2023, 0.1994, 0.2010])]
+            transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])]
         )
         self.dims = (3, 32, 32)
         self.n_classes = 10
@@ -52,6 +52,47 @@ class CIFAR10DataModule(pl.LightningDataModule):
         return DataLoader(self.cifar_test, batch_size = self.hparams.batch_size, 
                           shuffle=False, num_workers=self.hparams.workers, pin_memory=True)
 
+class CIFAR100DataModule(pl.LightningDataModule):
+    def __init__(self, hparams):
+        super(CIFAR100DataModule, self).__init__()
+        self.hparams = hparams
+        self.data_dir = self.hparams.data_path
+        self.train_transforms = get_transforms(
+            mean=[0.5071, 0.4867, 0.4408],
+            std=[0.2675, 0.2565, 0.2761],
+            **vars(hparams)
+        )
+        self.test_transforms = transforms.Compose([
+            transforms.Resize(hparams.size),
+            transforms.CenterCrop(hparams.size),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.5071, 0.4867, 0.4408], std=[0.2675, 0.2565, 0.2761])]
+        )
+        self.dims = (3, 32, 32)
+        self.n_classes = 100
+
+    def prepare_data(self):
+        CIFAR100(self.data_dir, train=True, download=True)
+        CIFAR100(self.data_dir, train=False, download=True)
+
+    def setup(self, stage='fit'):
+        if stage == 'fit':
+            self.cifar_train = CIFAR100(self.data_dir, train=True, transform=self.train_transforms)
+            self.cifar_val = CIFAR100(self.data_dir, train=False, transform=self.test_transforms)
+        elif stage == 'test':
+            self.cifar_test = CIFAR100(self.data_dir, train=False, transform=self.test_transforms)
+
+    def train_dataloader(self):
+        return DataLoader(self.cifar_train, batch_size = self.hparams.batch_size, 
+                          shuffle=True, num_workers=self.hparams.workers, pin_memory=True)
+
+    def val_dataloader(self):
+        return DataLoader(self.cifar_val, batch_size = self.hparams.batch_size, 
+                          shuffle=False, num_workers=self.hparams.workers, pin_memory=True)
+
+    def test_dataloader(self):
+        return DataLoader(self.cifar_test, batch_size = self.hparams.batch_size, 
+                          shuffle=False, num_workers=self.hparams.workers, pin_memory=True)
     
 def get_transforms(mean, std, size, padding, **kwargs):
     name = kwargs['transforms']
@@ -156,5 +197,7 @@ def get_datamodule(hparams):
 
 
 datamodule_dict = {
-    'cifar10': CIFAR10DataModule
+    'cifar10': CIFAR10DataModule,
+    'cifar100': CIFAR100DataModule,
+       
 }

@@ -65,12 +65,12 @@ class PreActBottleneck(nn.Module):
 
 
 class PreActResNet(nn.Module):
-    def __init__(self, block, num_blocks, initial_channels, n_classes, stride=1):
+    def __init__(self, block, num_blocks, input_channels=3, n_classes=10, initial_channels=64, stride=1):
         super(PreActResNet, self).__init__()
         self.in_planes = initial_channels
         self.n_classes = n_classes
 
-        self.conv1 = nn.Conv2d(3, initial_channels, kernel_size=3, stride=stride, padding=1, bias=False)
+        self.conv1 = nn.Conv2d(input_channels, initial_channels, kernel_size=3, stride=stride, padding=1, bias=False)
         self.layer1 = self._make_layer(block, initial_channels, num_blocks[0], stride=1)
         self.layer2 = self._make_layer(block, initial_channels*2, num_blocks[1], stride=2)
         self.layer3 = self._make_layer(block, initial_channels*4, num_blocks[2], stride=2)
@@ -98,18 +98,18 @@ class PreActResNet(nn.Module):
         return out
 
 
-def preactresnet18(n_classes=10, initial_channels=64, stride=1, **kwargs):
-    return PreActResNet(PreActBlock, [2,2,2,2], initial_channels, n_classes, stride=stride)
+def preactresnet18(input_channels=3, n_classes=10,  **kwargs):
+    return PreActResNet(PreActBlock, [2,2,2,2], input_channels=kwargs['dims'][0], n_classes=n_classes)
 
-def preactresnet34(n_classes=10, initial_channels=64, stride=1, **kwargs):
-    return PreActResNet(PreActBlock, [3,4,6,3], initial_channels, n_classes, stride=stride)
+def preactresnet34(input_channels=3,  n_classes=10, **kwargs):
+    return PreActResNet(PreActBlock, [3,4,6,3], input_channels=kwargs['dims'][0], n_classes=n_classes)
 
-def preactresnet50(n_classes=10, initial_channels=64, stride=1, **kwargs):
-    return PreActResNet(PreActBottleneck, [3,4,6,3], initial_channels, n_classes, stride=stride)
+def preactresnet50(input_channels=3, n_classes=10, **kwargs):
+    return PreActResNet(PreActBottleneck, [3,4,6,3], input_channels=kwargs['dims'][0], n_classes=n_classes)
 
-def preactresnet101(n_classes=10, initial_channels=64, stride=1, **kwargs):
-    return PreActResNet(PreActBottleneck, [3,4,23,3], initial_channels, n_classes, stride=stride)
+def preactresnet101(input_channels=3, n_classes=10, **kwargs):
+    return PreActResNet(PreActBottleneck, [3,4,23,3], input_channels=kwargs['dims'][0], n_classes=n_classes)
 
-def preactresnet152(n_classes=10, initial_channels=64, stride=1, **kwargs):
-    return PreActResNet(PreActBottleneck, [3,8,36,3], initial_channels, n_classes, stride=stride)
+def preactresnet152(input_channels=3, n_classes=10, **kwargs):
+    return PreActResNet(PreActBottleneck, [3,8,36,3], input_channels=kwargs['dims'][0], n_classes=n_classes)
 

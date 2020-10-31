@@ -115,7 +115,6 @@ default_hparams = {
     'cutout_size': 16,
     'cutout_n_holes': 1,
     'arch': 'preactresnet18',
-    'initial_channels': 64,
     'weight_init': 'normal', 
     'weight_init_gain': 0.02, 
     'training': 'vanilla',

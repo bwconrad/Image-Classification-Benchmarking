@@ -1,12 +1,18 @@
 from torch.nn import init
 from .preresnet import *
+from .xresnet import *
 
 networks = {
     'preactresnet18': preactresnet18,
     'preactresnet34': preactresnet34,
     'preactresnet50': preactresnet50,
     'preactresnet101': preactresnet101,
-    'preactresnet152': preactresnet152
+    'preactresnet152': preactresnet152,
+    'xresnet18': xresnet18,
+    'xresnet34': xresnet34,
+    'xresnet50': xresnet50,
+    'xresnet101': xresnet101,
+    'xresnet152': xresnet152
 }
 
 def load_network(hparams):
