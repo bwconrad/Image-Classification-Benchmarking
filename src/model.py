@@ -85,7 +85,7 @@ class Model(pl.LightningModule):
             print('Using no LR schedule') #### Add none into get_scheduler with lambda scheduler
             return [optimizer]
         else:
-            scheduler = get_scheduler(optimizer, hparams)
+            scheduler = get_scheduler(optimizer, self.hparams)
             return [optimizer], [scheduler]
 
     def _smooth(self, y):

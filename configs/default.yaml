@@ -1,13 +1,11 @@
 #############
 ## General ##
 #############
-# Evaluate model from checkpoint (False -> Train the model)
-evaluate: False # True | False
 # Path of checkpoint to initialize model from
 resume: 
 # Manually set random seed
 seed: # Any integer 
-experiment_name: test
+experiment_name: cifar10-mixup-ls-aa
 
 ###########
 ## Paths ##
@@ -24,7 +22,7 @@ output_path: output/
 # Name of dataset
 dataset: cifar10
 # Type of transformations to apply
-transforms: standard # none | standard | cutout | autoaugment | autoaugment_cutout | randaugment | randaugment_cutout | gridmask | autoaugment_gridmask | augmix
+transforms: autoaugment_cutout # none | standard | cutout | autoaugment | autoaugment_cutout | randaugment | randaugment_cutout | gridmask | autoaugment_gridmask | augmix
 # Include cutout as a choosable augmentation (randaugment, randaugment_cutout, augmix)
 include_cutout: False # True | False
 # Number of augmentations to apply (transforms = randaugment, rangaugment_cutout)
@@ -47,8 +45,9 @@ augmix_width: 3
 augmix_severity: 3
 # Mixing alpha in augmix (transforms = augmix)
 augmix_alpha: 1
-
+# Width and height of cutout square
 cutout_size: 16
+# Number of cutout holes
 cutout_n_holes: 1
 
 ###########
@@ -69,9 +68,9 @@ weight_init_gain: 0.02
 ##############
 
 # Training procedure (mixup variants)
-training: vanilla # vanilla | mixup |  cutmix 
+training: mixup # vanilla | mixup |  cutmix 
 # Label smoothing epsilon
-smoothing: 0 # [0,1]
+smoothing: 0.1 # [0,1]
 # Alpha of mixing beta distribution (training = mixup, manifold_mixup, cutmix, manifold_cutmix)
 mix_alpha: 1 
 # Probability of mixing (training = mixup, manifold_mixup, cutmix, manifold_cutmix) 
@@ -96,9 +95,9 @@ ranger_gc: True # Use gradient centralization
 ###############
 ## Scheduler ##
 ###############
-epochs: 200 
+epochs: 600 
 # Learning rate schedule type
-schedule: none # none | step | cosine
+schedule: cosine # none | step | cosine
 # Epochs when learning rate is decrease by step_size (schedule = step)
 steps: [100, 150] # In list form [] 
 # Learning rate reduction per step (schedule = step)

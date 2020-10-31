@@ -42,7 +42,7 @@ def get_scheduler(optimizer, hparams):
     if name == 'cosine':
         print('Using Cosine LR schedule')
         return {
-            'scheduler': lr_scheduler.CosineAnnealingL(
+            'scheduler': lr_scheduler.CosineAnnealingLR(
                 optimizer,
                 T_max=hparams.epochs,
                 verbose=True
