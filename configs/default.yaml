@@ -1,0 +1,106 @@
+#############
+## General ##
+#############
+# Evaluate model from checkpoint (False -> Train the model)
+evaluate: False # True | False
+# Path of checkpoint to initialize model from
+resume: 
+# Manually set random seed
+seed: # Any integer 
+experiment_name: test
+
+###########
+## Paths ##
+###########
+# Path to dataset (or where to download dataset)
+data_path: data/
+# Path to put output
+output_path: output/
+
+#############
+## Dataset ##
+#############
+
+# Name of dataset
+dataset: cifar10
+# Type of transformations to apply
+transforms: standard # none | standard | cutout | autoaugment | autoaugment_cutout | randaugment | randaugment_cutout | gridmask | autoaugment_gridmask | augmix
+# Include cutout as a choosable augmentation (randaugment, randaugment_cutout, augmix)
+include_cutout: False # True | False
+# Number of augmentations to apply (transforms = randaugment, rangaugment_cutout)
+randaug_N: 2
+# Magnitude of augmentations (transforms = randaugment, rangaugment_cutout)
+randaug_M: 5 # [0, 30]
+# Ratio of images to keep (transforms = gridmask, autoaugment_gridmask)
+gridmask_r: 0.4 # [0,1] 
+# Minimum length of a unit in pixels (transforms = gridmask, autoaugment_gridmask)
+gridmask_minD: 8
+# Maximum length of a unit in pixels (transforms = gridmask, autoaugment_gridmask)
+gridmask_maxD: 32
+# Maximum degrees of rotation on grid (transforms = gridmask, autoaugment_gridmask)
+gridmask_rotate: 360 # [0, 360]
+# Max number of augments in a chain (transforms = augmix)
+augmix_depth: 3
+# Number of augmentation chains (transforms = augmix)
+augmix_width: 3
+# Magnitude of augmentations (transforms = augmix)
+augmix_severity: 3
+# Mixing alpha in augmix (transforms = augmix)
+augmix_alpha: 1
+
+cutout_size: 16
+cutout_n_holes: 1
+
+###########
+## Model ##
+###########
+
+# Network architecture
+arch: preactresnet18  # preactresnet18 | preactresnet34 | preactresnet50 | preactresnet101 | preactresnet152
+# Number of feature maps in first hidden layer
+initial_channels: 64
+# Weight initialization distribution for convolution and linear layers
+weight_init: normal # normal | xavier | kaiming | orthogonal
+# Standard deviation of normal distribution (weight_init = normal)
+weight_init_gain: 0.02 
+
+##############
+## Training ##
+##############
+
+# Training procedure (mixup variants)
+training: vanilla # vanilla | mixup |  cutmix 
+# Label smoothing epsilon
+smoothing: 0 # [0,1]
+# Alpha of mixing beta distribution (training = mixup, manifold_mixup, cutmix, manifold_cutmix)
+mix_alpha: 1 
+# Probability of mixing (training = mixup, manifold_mixup, cutmix, manifold_cutmix) 
+mix_prob: 1 # [0,1]
+
+###############
+## Optimizer ##
+###############
+optimizer: sgd  # sgd | adam | ranger
+batch_size: 128
+workers: 6
+lr: 0.1
+momentum: 0.9
+nesterov: True
+weight_decay: 0.0001
+beta1: 0.9
+beta2: 0.999
+ranger_alpha: 0.5
+ranger_k: 6
+ranger_gc: True # Use gradient centralization
+  
+###############
+## Scheduler ##
+###############
+epochs: 200 
+# Learning rate schedule type
+schedule: none # none | step | cosine
+# Epochs when learning rate is decrease by step_size (schedule = step)
+steps: [100, 150] # In list form [] 
+# Learning rate reduction per step (schedule = step)
+step_size: 0.1 # [0,1] 
+
