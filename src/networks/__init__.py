@@ -47,5 +47,5 @@ def init_weights(net, init_type='normal', init_gain=0.02):
             init.constant_(m.bias.data, 0.0)
 
 
-    print('\tInitializing weights as {}'.format(init_type.upper()))
+    print('Initializing weights as {}'.format(init_type.upper()))
     net.apply(init_func)

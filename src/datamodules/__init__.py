@@ -10,13 +10,6 @@ from .autoaugment import CIFAR10Policy
 from .randaugment import RandAugment
 from .augmix import AugMix
 
-def get_datamodule(hparams):
-    if hparams.dataset == 'cifar10':
-        print('Loading CIFAR10 dataset...')
-        return CIFAR10DataModule(hparams)
-    else:
-        raise NotImplementedError('{} is not an available dataset'.format(hparams.dataset))
-
 class CIFAR10DataModule(pl.LightningDataModule):
     def __init__(self, hparams):
         super(CIFAR10DataModule, self).__init__()
@@ -25,11 +18,11 @@ class CIFAR10DataModule(pl.LightningDataModule):
         self.train_transforms = get_transforms(
             mean=[0.4914, 0.4822, 0.4465],
             std=[0.2023, 0.1994, 0.2010],
-            size=32,
-            padding=4,
             **vars(hparams)
         )
         self.test_transforms = transforms.Compose([
+            transforms.Resize(hparams.size),
+            transforms.CenterCrop(hparams.size),
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2023, 0.1994, 0.2010])]
         )
@@ -60,11 +53,11 @@ class CIFAR10DataModule(pl.LightningDataModule):
                           shuffle=False, num_workers=self.hparams.workers, pin_memory=True)
 
     
-def get_transforms(mean, std, size, padding=4, **kwargs):
+def get_transforms(mean, std, size, padding, **kwargs):
     name = kwargs['transforms']
 
     if name == 'standard':
-        print("\tUsing Standard data transformations.")
+        print("Using Standard data transformations.")
         return transforms.Compose([
             transforms.RandomCrop(size, padding=padding),
             transforms.RandomHorizontalFlip(),
@@ -72,7 +65,7 @@ def get_transforms(mean, std, size, padding=4, **kwargs):
             transforms.Normalize(mean, std)])
         
     elif name == 'cutout':
-        print("\tUsing Cutout data transformations.")
+        print("Using Cutout data transformations.")
         return transforms.Compose([
             transforms.RandomCrop(size, padding=padding),
             transforms.RandomHorizontalFlip(),
@@ -81,7 +74,7 @@ def get_transforms(mean, std, size, padding=4, **kwargs):
             transforms.Normalize(mean, std)])
 
     elif name == 'autoaugment':
-        print("\tUsing AutoAugment data transformations.")
+        print("Using AutoAugment data transformations.")
         return transforms.Compose([
             transforms.RandomCrop(size, padding=padding),
             transforms.RandomHorizontalFlip(),
@@ -90,7 +83,7 @@ def get_transforms(mean, std, size, padding=4, **kwargs):
             transforms.Normalize(mean, std)])
     
     elif name == 'autoaugment_cutout':
-        print("\tUsing AutoAugment and Cutout data transformations.")
+        print("Using AutoAugment and Cutout data transformations.")
         return transforms.Compose([
             transforms.RandomCrop(size, padding=padding),
             transforms.RandomHorizontalFlip(),
@@ -100,7 +93,7 @@ def get_transforms(mean, std, size, padding=4, **kwargs):
             transforms.Normalize(mean, std)])
 
     elif name == 'randaugment':
-        print("\tUsing RandAugment data transformations.")
+        print("Using RandAugment data transformations.")
         return transforms.Compose([
             transforms.RandomCrop(size, padding=padding),
             transforms.RandomHorizontalFlip(),
@@ -109,7 +102,7 @@ def get_transforms(mean, std, size, padding=4, **kwargs):
             transforms.Normalize(mean, std)])
 
     elif name == 'randaugment_cutout':
-        print("\tUsing RandAugment and Cutout data transformations.")
+        print("Using RandAugment and Cutout data transformations.")
         return transforms.Compose([
             transforms.RandomCrop(size, padding=padding),
             transforms.RandomHorizontalFlip(),
@@ -119,7 +112,7 @@ def get_transforms(mean, std, size, padding=4, **kwargs):
             transforms.Normalize(mean, std)])
 
     elif name == 'gridmask':
-        print("\tUsing GridMask data transformations.")
+        print("Using GridMask data transformations.")
         return transforms.Compose([
             transforms.RandomCrop(size, padding=padding),
             transforms.RandomHorizontalFlip(),
@@ -128,7 +121,7 @@ def get_transforms(mean, std, size, padding=4, **kwargs):
             transforms.Normalize(mean, std)])    
 
     elif name == 'autoaugment_gridmask':
-        print("\tUsing Autoaugment and GridMask data transformations.")
+        print("Using Autoaugment and GridMask data transformations.")
         return transforms.Compose([
             transforms.RandomCrop(size, padding=padding),
             transforms.RandomHorizontalFlip(),
@@ -138,7 +131,7 @@ def get_transforms(mean, std, size, padding=4, **kwargs):
             transforms.Normalize(mean, std)])    
     
     elif name == 'augmix':
-        print("\tUsing AugMix data transformations.")
+        print("Using AugMix data transformations.")
         return transforms.Compose([
             transforms.RandomCrop(size, padding=padding),
             transforms.RandomHorizontalFlip(),
@@ -148,12 +141,20 @@ def get_transforms(mean, std, size, padding=4, **kwargs):
             transforms.Normalize(mean, std)])
 
     else:
-        print("\tUsing no data transformations.")
+        print("Using no data transformations.")
         return transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize(mean, std)])
 
 
+def get_datamodule(hparams):
+    if hparams.dataset in datamodule_dict:
+        print(f'Loading {hparams.dataset.upper()} dataset...')
+        return datamodule_dict[hparams.dataset](hparams)
+    else:
+        raise NotImplementedError('{} is not an available dataset'.format(hparams.dataset))
 
 
-
+datamodule_dict = {
+    'cifar10': CIFAR10DataModule
+}

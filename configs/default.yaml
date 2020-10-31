@@ -5,7 +5,7 @@
 resume: 
 # Manually set random seed
 seed: # Any integer 
-experiment_name: cifar10-mixup-ls-aa
+experiment_name: test
 
 ###########
 ## Paths ##
@@ -22,7 +22,7 @@ output_path: output/
 # Name of dataset
 dataset: cifar10
 # Type of transformations to apply
-transforms: autoaugment_cutout # none | standard | cutout | autoaugment | autoaugment_cutout | randaugment | randaugment_cutout | gridmask | autoaugment_gridmask | augmix
+transforms: standard # none | standard | cutout | autoaugment | autoaugment_cutout | randaugment | randaugment_cutout | gridmask | autoaugment_gridmask | augmix
 # Include cutout as a choosable augmentation (randaugment, randaugment_cutout, augmix)
 include_cutout: False # True | False
 # Number of augmentations to apply (transforms = randaugment, rangaugment_cutout)
@@ -68,9 +68,9 @@ weight_init_gain: 0.02
 ##############
 
 # Training procedure (mixup variants)
-training: mixup # vanilla | mixup |  cutmix 
+training: vanilla # vanilla | mixup |  cutmix 
 # Label smoothing epsilon
-smoothing: 0.1 # [0,1]
+smoothing: 0 # [0,1]
 # Alpha of mixing beta distribution (training = mixup, manifold_mixup, cutmix, manifold_cutmix)
 mix_alpha: 1 
 # Probability of mixing (training = mixup, manifold_mixup, cutmix, manifold_cutmix) 
@@ -95,9 +95,9 @@ ranger_gc: True # Use gradient centralization
 ###############
 ## Scheduler ##
 ###############
-epochs: 600 
+epochs: 200 
 # Learning rate schedule type
-schedule: cosine # none | step | cosine
+schedule: none # none | step | cosine
 # Epochs when learning rate is decrease by step_size (schedule = step)
 steps: [100, 150] # In list form [] 
 # Learning rate reduction per step (schedule = step)

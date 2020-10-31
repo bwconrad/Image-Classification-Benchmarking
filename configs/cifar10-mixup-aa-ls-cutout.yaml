@@ -1,0 +1,8 @@
+experiment_name: cifar10-mixup-aa-ls-cutout
+dataset: cifar10
+transforms: autoaugment_cutout
+training: mixup
+smoothing: 0.1
+epochs: 600
+schedule: cosine
+optimizer: ranger

@@ -24,7 +24,7 @@ class Model(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         x, y = batch
         y = F.one_hot(y, num_classes=self.hparams.n_classes).float()
-
+        
         # Apply label smoothing
         if self.hparams.smoothing > 0:
             y = self._smooth(y)
@@ -43,8 +43,9 @@ class Model(pl.LightningModule):
         # Calculate loss and accuracy
         loss = self.criterion(pred, y)
         acc = self.train_acc(pred.max(1).indices, y.max(1).indices)
-        self.log('train_loss', loss, prog_bar=True, logger=True)
-        self.log('train_acc', acc, prog_bar=True, logger=True)
+        self.log('train_loss', loss)
+        self.log('train_acc', acc)
+        self.log('lr', self.optimizer.param_groups[0]['lr'], prog_bar=True)
 
         return loss
 
@@ -59,8 +60,8 @@ class Model(pl.LightningModule):
         # Calculate loss and accuracy
         loss = self.criterion(pred, y)
         acc = self.val_acc(pred.max(1).indices, y.max(1).indices)
-        self.log('val_loss', loss, prog_bar=True, logger=True)
-        self.log('val_acc', acc, prog_bar=True, logger=True)
+        self.log('val_loss', loss)
+        self.log('val_acc', acc)
 
         return OrderedDict({
             'val_acc': acc,
@@ -74,19 +75,31 @@ class Model(pl.LightningModule):
         print(f'Validation Loss: {avg_loss} Validation Accuracy: {avg_acc}')
 
     def test_step(self, batch, batch_idx):
-        return
+        x, y = batch
+        y = F.one_hot(y, num_classes=self.hparams.n_classes).float()
+
+        # Pass through model
+        pred = self(x)
+
+        # Calculate loss and accuracy
+        loss = self.criterion(pred, y)
+        acc = self.val_acc(pred.max(1).indices, y.max(1).indices)
+    
+        return OrderedDict({
+            'test_acc': acc,
+            'test_loss': loss,
+        })
 
     def test_epoch_end(self, outputs):
-        return
+        avg_loss = torch.stack([x['val_loss'] for x in outputs]).mean()
+        avg_acc = torch.stack([x['val_acc'] for x in outputs]).mean()
+        ###########################################################################
 
     def configure_optimizers(self):
         optimizer = get_optimizer(self.parameters(), self.hparams)
-        if self.hparams.schedule == 'none':
-            print('Using no LR schedule') #### Add none into get_scheduler with lambda scheduler
-            return [optimizer]
-        else:
-            scheduler = get_scheduler(optimizer, self.hparams)
-            return [optimizer], [scheduler]
+        self.optimizer = optimizer # Make the optimizer availble to access current lr
+        scheduler = get_scheduler(optimizer, self.hparams)
+        return [optimizer], [scheduler]
 
     def _smooth(self, y):
         smoothing = self.hparams.smoothing

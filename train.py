@@ -3,21 +3,19 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import TensorBoardLogger, CSVLogger
 import os
 from pathlib import Path
-import yaml
 from argparse import ArgumentParser, Namespace
 
 from src.model import Model
 from src.datamodules import get_datamodule
+from src.utils import hparams_from_config
 
 parser = ArgumentParser()
-parser.add_argument('-c', '--config_path', type=Path, help='Path to the config.', required=True) # TODO: define defaults in model, use LitModel.add_model_specific_args(parser)
+parser.add_argument('-c', '--config_path', type=Path, help='Path to the config.', default='.') # TODO: define defaults in model, use LitModel.add_model_specific_args(parser)
 parser = pl.Trainer.add_argparse_args(parser)
 args = parser.parse_args()
 
-# Unpack hparams from config file
-with open(args.config_path) as f:
-    hparams = yaml.load(f, Loader=yaml.SafeLoader)
-hparams = Namespace(**hparams)
+# Load hparams from config file
+hparams = hparams_from_config(args.config_path)
 
 # Define callbacks
 tb_logger = TensorBoardLogger(
