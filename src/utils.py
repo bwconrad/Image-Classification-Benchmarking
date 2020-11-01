@@ -4,6 +4,8 @@ import pprint
 from argparse import Namespace
 import os
 import yaml
+import warnings
+warnings.filterwarnings("ignore", message="Please also save or load the state of the optimizer when saving or loading the scheduler.")
 
 from .optim.ranger import Ranger
 

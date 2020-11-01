@@ -16,6 +16,7 @@ args = parser.parse_args()
 
 # Load hparams from config file
 hparams = hparams_from_config(args.config_path)
+args.max_epochs = hparams.epochs
 
 # Define callbacks
 tb_logger = TensorBoardLogger(

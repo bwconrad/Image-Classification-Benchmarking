@@ -5,4 +5,3 @@ training: mixup
 smoothing: 0.1
 epochs: 600
 schedule: cosine
-optimizer: ranger
