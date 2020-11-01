@@ -98,7 +98,7 @@ default_hparams = {
     'data_path': 'data/',  
     'output_path': 'output/',
     'dataset': 'cifar10',
-    'size': 32,
+    'size': 0,
     'padding': 4,
     'transforms': 'standard', 
     'include_cutout': False, 

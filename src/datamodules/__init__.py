@@ -15,6 +15,10 @@ class CIFAR10DataModule(pl.LightningDataModule):
         super(CIFAR10DataModule, self).__init__()
         self.hparams = hparams
         self.data_dir = self.hparams.data_path
+        hparams.size = hparams.size if hparams.size != 0 else 32 # If size=0, default to 32
+        self.dims = (3, hparams.size, hparams.size)
+        self.n_classes = 10
+        
         self.train_transforms = get_transforms(
             mean=[0.4914, 0.4822, 0.4465],
             std=[0.2470, 0.2435, 0.2616],
@@ -26,8 +30,7 @@ class CIFAR10DataModule(pl.LightningDataModule):
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])]
         )
-        self.dims = (3, 32, 32)
-        self.n_classes = 10
+        
 
     def prepare_data(self):
         CIFAR10(self.data_dir, train=True, download=True)
@@ -57,6 +60,10 @@ class CIFAR100DataModule(pl.LightningDataModule):
         super(CIFAR100DataModule, self).__init__()
         self.hparams = hparams
         self.data_dir = self.hparams.data_path
+        hparams.size = hparams.size if hparams.size != 0 else 32 # If size=0, default to 32
+        self.dims = (3, hparams.size, hparams.size)
+        self.n_classes = 100
+                
         self.train_transforms = get_transforms(
             mean=[0.5071, 0.4867, 0.4408],
             std=[0.2675, 0.2565, 0.2761],
@@ -68,8 +75,6 @@ class CIFAR100DataModule(pl.LightningDataModule):
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.5071, 0.4867, 0.4408], std=[0.2675, 0.2565, 0.2761])]
         )
-        self.dims = (3, 32, 32)
-        self.n_classes = 100
 
     def prepare_data(self):
         CIFAR100(self.data_dir, train=True, download=True)

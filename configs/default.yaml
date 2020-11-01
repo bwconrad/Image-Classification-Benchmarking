@@ -21,6 +21,10 @@ output_path: output/
 
 # Name of dataset
 dataset: cifar10
+# Image size (size=0 defaults to dataset's original size) 
+size: 0
+# Padding before random resize
+padding: 4
 # Type of transformations to apply
 transforms: standard # none | standard | cutout | autoaugment | autoaugment_cutout | randaugment | randaugment_cutout | gridmask | autoaugment_gridmask | augmix
 # Include cutout as a choosable augmentation (randaugment, randaugment_cutout, augmix)

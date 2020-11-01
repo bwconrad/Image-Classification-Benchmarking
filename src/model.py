@@ -23,8 +23,6 @@ class Model(pl.LightningModule):
 
     def training_step(self, batch, batch_idx):
         x, y = batch
-        print(y)
-        exit()
         y = F.one_hot(y, num_classes=self.hparams.n_classes).float()
 
         # Apply label smoothing
