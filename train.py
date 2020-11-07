@@ -1,5 +1,5 @@
 import pytorch_lightning as pl
-from pytorch_lightning.callbacks import ModelCheckpoint
+from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor
 from pytorch_lightning.loggers import TensorBoardLogger, CSVLogger
 import os
 from pathlib import Path
@@ -35,6 +35,7 @@ checkpoint_callback = ModelCheckpoint(
     mode='max',
     save_last=True,
 )
+lr_monitor = LearningRateMonitor(logging_interval='step')
 
 # Load datamodule
 dm = get_datamodule(hparams)
@@ -49,6 +50,7 @@ trainer = pl.Trainer.from_argparse_args(
     args,
     #resume_from_checkpoint=hparams.checkpoint if hparams.checkpoint else None,
     checkpoint_callback=checkpoint_callback,
+    callbacks=[lr_monitor,],
     logger=[tb_logger, csv_logger],
 )
 

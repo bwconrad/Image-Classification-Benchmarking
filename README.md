@@ -14,7 +14,7 @@ __Regularization__: Label Smoothing, Mixup, Cutmix (Fmix)
 
 __Learning Rate Schedules__: Step, Cosine (Flat cosine, triangular)
 
-__Optimizers__: SGD, Adam, Ranger
+__Optimizers__: SGD, Adam, Ranger (RangerLARS)
 
 ## Results
 Results from all experiments can be found in ```results.csv```. 

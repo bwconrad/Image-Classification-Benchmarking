@@ -5,7 +5,8 @@ transforms: autoaugment_cutout
 training: mixup
 smoothing: 0.1
 epochs: 600
-schedule: cosine
+schedule: flatcosine
+flat_rate: 0.75
 optimizer: ranger
 beta1: 0.95
 beta2: 0.999
