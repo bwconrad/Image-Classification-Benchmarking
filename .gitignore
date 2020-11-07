@@ -1,5 +1,6 @@
 data/
 output/
+scripts/
 *__pycache__
 *.txt
 

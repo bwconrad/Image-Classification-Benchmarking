@@ -203,6 +203,5 @@ def get_datamodule(hparams):
 
 datamodule_dict = {
     'cifar10': CIFAR10DataModule,
-    'cifar100': CIFAR100DataModule,
-       
+    'cifar100': CIFAR100DataModule,     
 }

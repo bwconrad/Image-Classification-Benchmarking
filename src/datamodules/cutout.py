@@ -1,3 +1,7 @@
+'''
+From: https://github.com/uoguelph-mlrg/Cutout/blob/master/util/cutout.py
+'''
+
 import torch
 import numpy as np 
 
@@ -7,8 +11,6 @@ class Cutout(object):
     Args:
         n_holes (int): Number of patches to cut out of each image.
         length (int): The length (in pixels) of each square patch.
-    
-    From: https://github.com/uoguelph-mlrg/Cutout/blob/master/util/cutout.py
     '''
     def __init__(self, n_holes, length):
         self.n_holes = n_holes

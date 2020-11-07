@@ -1,3 +1,7 @@
+'''
+From: https://github.com/DeepVoltaire/AutoAugment/blob/master/autoaugment.py
+'''
+
 from PIL import Image, ImageEnhance, ImageOps
 import numpy as np
 import random
@@ -13,8 +17,6 @@ class CIFAR10Policy(object):
         >>>     transforms.Resize(256),
         >>>     CIFAR10Policy(),
         >>>     transforms.ToTensor()])
-
-    From: https://github.com/DeepVoltaire/AutoAugment/blob/master/autoaugment.py
     '''
     def __init__(self, fillcolor=(128, 128, 128)):
         self.policies = [
@@ -58,9 +60,6 @@ class CIFAR10Policy(object):
         return "AutoAugment CIFAR10 Policy"
 
 class SubPolicy(object):
-    '''
-    From: https://github.com/DeepVoltaire/AutoAugment/blob/master/autoaugment.py
-    '''
     def __init__(self, p1, operation1, magnitude_idx1, p2, operation2, magnitude_idx2, fillcolor=(128, 128, 128)):
         ranges = {
             "shearX": np.linspace(0, 0.3, 10),
