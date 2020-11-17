@@ -1,0 +1,7 @@
+experiment_name: preact18-baseline
+dataset: cifar10
+transforms: standard
+training: vanilla
+epochs: 200
+schedule: cosine
+weight_init: kaiming

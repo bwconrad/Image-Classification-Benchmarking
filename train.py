@@ -35,7 +35,6 @@ checkpoint_callback = ModelCheckpoint(
     mode='max',
     save_last=True,
 )
-lr_monitor = LearningRateMonitor(logging_interval='step')
 
 # Load datamodule
 dm = get_datamodule(hparams)
@@ -50,7 +49,6 @@ trainer = pl.Trainer.from_argparse_args(
     args,
     #resume_from_checkpoint=hparams.checkpoint if hparams.checkpoint else None,
     checkpoint_callback=checkpoint_callback,
-    callbacks=[lr_monitor,],
     logger=[tb_logger, csv_logger],
 )
 

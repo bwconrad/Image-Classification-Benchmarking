@@ -81,29 +81,51 @@ mix_prob: 1 # [0,1]
 ###############
 ## Optimizer ##
 ###############
-optimizer: sgd  # sgd | adam | ranger
+# Name of optimzer
+optimizer: sgd  # sgd | adam | ranger | adabelief | ranger_adabelief
+# Batch size
 batch_size: 128
+# Number of CPU workers
 workers: 6
+# Learning rate
 lr: 0.1
-momentum: 0.9
-nesterov: True
+# Momentum (optimizer = sgd)
+momentum: 0.9  
+# Use Nesterov momentum (optimizer = sgd)
+nesterov: True 
+# Weigh decay 
 weight_decay: 0.0001
-beta1: 0.9
-beta2: 0.999
-ranger_alpha: 0.5
-ranger_k: 6
-ranger_gc: True # Use gradient centralization
-  
+# Beta 1 (optimizer = adam, ranger, adabelief, ranger_adabelief)
+beta1: 0.9 # [0,1]
+# Beta 2 (optimizer = adam, ranger, adabelief, ranger_adabelief)
+beta2: 0.999 # [0,1]
+# (optimizer = ranger, ranger_adabelief)
+ranger_alpha: 0.5 # [0,1]
+# Lookahead (optimizer = ranger, ranger_adabelief)
+ranger_k: 6 
+# Use gradient centralization (optimizer = ranger, ranger_adabelief)
+ranger_gc: True 
+# Demoninator epsilon for AdaBelief (optimizer = adabelief, ranger_adabelief)
+belief_eps: 1.0e-16
+# (optimizer = adabelief, ranger_adabelief)
+belief_weight_decouple: False
+# (optimizer = adabelief, ranger_adabelief)
+belief_recitfy: False 
+# (optimizer = adabelief, ranger_adabelief)
+belief_amsgrad: False
+# (optimizer = adabelief, ranger_adabelief)
+belief_fixed_decay: False
+
 ###############
 ## Scheduler ##
 ###############
 epochs: 200 
-# Learning rate schedule type
+# Learning rate schedule 
 schedule: none # none | step | cosine | flatcosine
 # Ratio of epochs with constant LR before decaying (schedule = flatcosine)
 flat_rate: 0.5 # [0,1]
 # Epochs when learning rate is decrease by step_size (schedule = step)
-steps: [100, 150] # In list form [] 
+steps: [100, 150] # List 
 # Learning rate reduction per step (schedule = step)
 step_size: 0.1 # [0,1] 
 

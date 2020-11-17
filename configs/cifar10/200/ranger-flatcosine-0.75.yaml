@@ -1,0 +1,12 @@
+experiment_name: preact18-ranger-flatcosine-0.75
+dataset: cifar10
+transforms: standard
+training: vanilla
+epochs: 200
+schedule: flatcosine
+flat_rate: 0.75
+weight_init: kaiming
+optimizer: ranger 
+beta1: 0.95
+beta2: 0.999
+lr: 0.001

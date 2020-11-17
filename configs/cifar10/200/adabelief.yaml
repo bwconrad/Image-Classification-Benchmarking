@@ -1,0 +1,18 @@
+experiment_name: preact18-adabelief
+dataset: cifar10
+transforms: standard
+training: vanilla
+epochs: 200
+schedule: cosine
+weight_init: kaiming
+optimizer: adabelief
+lr: 1.0e-3
+beta1: 0.9
+beta2: 0.999
+belief_eps: 1.0e-8
+weight_decay: 5.0e-4
+belief_weight_decouple: False
+belief_rectify: False
+belief_fixed_decay: False
+belief_amsgrad: False
+

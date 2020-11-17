@@ -8,6 +8,8 @@ import warnings
 warnings.filterwarnings("ignore", message="Please also save or load the state of the optimizer when saving or loading the scheduler.")
 
 from .optim.ranger import Ranger
+from adabelief_pytorch import AdaBelief
+from ranger_adabelief import RangerAdaBelief
 
 def get_optimizer(parameters, hparams):
     name = hparams.optimizer
@@ -40,6 +42,32 @@ def get_optimizer(parameters, hparams):
             weight_decay=hparams.weight_decay,
             use_gc=hparams.ranger_gc, 
         )
+    elif name == 'adabelief':
+        print('Using AdaBelief optimizer')
+        return AdaBelief(
+            parameters, 
+            lr=hparams.lr, 
+            weight_decay=hparams.weight_decay,
+            eps=hparams.belief_eps, 
+            betas=(hparams.beta1, hparams.beta2), 
+            weight_decouple=hparams.belief_weight_decouple, 
+            rectify=hparams.belief_recitfy,
+            amsgrad=hparams.belief_amsgrad,
+            fixed_decay=hparams.belief_fixed_decay
+        )
+    elif name == 'ranger_adabelief':
+        print('Using RangerAdaBelief optimizer')
+        return RangerAdaBelief(
+            parameters, 
+            lr=hparams.lr,
+            alpha=hparams.ranger_alpha,
+            k=hparams.ranger_k,
+            betas=(hparams.beta1, hparams.beta2),
+            weight_decay=hparams.weight_decay,
+            use_gc=hparams.ranger_gc, 
+            adabelief=True,
+        )
+    
     else:
         raise NotImplementedError(f'{name} is not an available optimizer')
 
@@ -186,4 +214,9 @@ default_hparams = {
     'flat_rate': 0.5, 
     'steps': [100, 150],
     'step_size': 0.1,
+    'belief_eps': 1e-16,
+    'belief_weight_decouple': False,
+    'belief_recitfy': False, 
+    'belief_amsgrad': False,
+    'belief_fixed_decay': False,
 }

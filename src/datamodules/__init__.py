@@ -10,6 +10,15 @@ from .autoaugment import CIFAR10Policy
 from .randaugment import RandAugment
 from .augmix import AugMix
 
+
+def get_datamodule(hparams):
+    if hparams.dataset in datamodule_dict:
+        print(f'Loading {hparams.dataset.upper()} dataset...')
+        return datamodule_dict[hparams.dataset](hparams)
+    else:
+        raise NotImplementedError('{} is not an available dataset'.format(hparams.dataset))
+
+
 class CIFAR10DataModule(pl.LightningDataModule):
     def __init__(self, hparams):
         super(CIFAR10DataModule, self).__init__()
@@ -191,14 +200,6 @@ def get_transforms(mean, std, size, padding, **kwargs):
         return transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize(mean, std)])
-
-
-def get_datamodule(hparams):
-    if hparams.dataset in datamodule_dict:
-        print(f'Loading {hparams.dataset.upper()} dataset...')
-        return datamodule_dict[hparams.dataset](hparams)
-    else:
-        raise NotImplementedError('{} is not an available dataset'.format(hparams.dataset))
 
 
 datamodule_dict = {
