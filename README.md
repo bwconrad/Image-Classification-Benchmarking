@@ -1,10 +1,10 @@
 # Image Classification Benchmarking
-Codebase for testing new techniques in image classification. Implemented in Pytorch Lightning.
+Experimenting with new techniques in image classification. Implemented in Pytorch Lightning.
 
-## Included Methods
+## Included Components
 __Datasets__: [CIFAR10](https://www.cs.toronto.edu/~kriz/cifar.html), [CIFAR100](https://www.cs.toronto.edu/~kriz/cifar.html) 
 
-__Architectures__: [PreAct ResNet](https://arxiv.org/abs/1603.05027) ([Code](https://github.com/vikasverma1077/manifold_mixup)), [XResNet](https://arxiv.org/abs/1812.01187v2) ([Code](https://towardsdatascience.com/xresnet-from-scratch-in-pytorch-e64e309af722)) 
+__Architectures__: [PreAct ResNet](https://arxiv.org/abs/1603.05027) ([Code](https://github.com/vikasverma1077/manifold_mixup)), [XResNet](https://arxiv.org/abs/1812.01187v2) ([Code](https://towardsdatascience.com/xresnet-from-scratch-in-pytorch-e64e309af722)), [EfficientNet](https://arxiv.org/abs/1905.11946) ([Code](https://github.com/lukemelas/EfficientNet-PyTorch)) 
 
 __Augmentations__: [AutoAugment](https://arxiv.org/abs/1805.09501) ([Code](https://github.com/DeepVoltaire/AutoAugment)), [Cutout](https://arxiv.org/abs/1708.04552) ([Code](https://github.com/uoguelph-mlrg/Cutout)), [RandAugment](https://arxiv.org/abs/1909.13719) ([Code](https://github.com/ildoonet/pytorch-randaugment)), [Augmix](https://arxiv.org/abs/1912.02781v2), [Gridmask](https://arxiv.org/abs/2001.04086) ([Code](https://github.com/Jia-Research-Lab/GridMask))
 

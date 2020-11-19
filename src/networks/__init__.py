@@ -1,6 +1,7 @@
 from torch.nn import init
 from .preresnet import *
 from .xresnet import *
+from .efficientnet import *
 
 networks = {
     'preactresnet18': preactresnet18,
@@ -12,7 +13,15 @@ networks = {
     'xresnet34': xresnet34,
     'xresnet50': xresnet50,
     'xresnet101': xresnet101,
-    'xresnet152': xresnet152
+    'xresnet152': xresnet152,
+    'efficientnet-b0': efficientnet_b0,
+    'efficientnet-b1': efficientnet_b1,
+    'efficientnet-b2': efficientnet_b2,
+    'efficientnet-b3': efficientnet_b3,
+    'efficientnet-b4': efficientnet_b4,
+    'efficientnet-b5': efficientnet_b5,
+    'efficientnet-b6': efficientnet_b6,
+    'efficientnet-b7': efficientnet_b7,
 }
 
 def load_network(hparams):
