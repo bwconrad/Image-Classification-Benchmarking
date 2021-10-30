@@ -1,16 +1,19 @@
-import pytorch_lightning as pl
-from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor
-from pytorch_lightning.loggers import TensorBoardLogger, CSVLogger
 import os
-from pathlib import Path
 from argparse import ArgumentParser, Namespace
+from pathlib import Path
 
-from src.model import Model
+import pytorch_lightning as pl
+from pytorch_lightning.callbacks import LearningRateMonitor, ModelCheckpoint
+from pytorch_lightning.loggers import CSVLogger, TensorBoardLogger
+
 from src.datamodules import get_datamodule
+from src.model import Model
 from src.utils import hparams_from_config
 
 parser = ArgumentParser()
-parser.add_argument('-c', '--config_path', type=Path, help='Path to the config.', default='.') # TODO: define defaults in model, use LitModel.add_model_specific_args(parser)
+parser.add_argument(
+    "-c", "--config_path", type=Path, help="Path to the config.", default="."
+)
 parser = pl.Trainer.add_argparse_args(parser)
 args = parser.parse_args()
 
@@ -20,19 +23,16 @@ args.max_epochs = hparams.epochs
 
 # Define callbacks
 tb_logger = TensorBoardLogger(
-    save_dir=hparams.output_path,
-    name=hparams.experiment_name
+    save_dir=hparams.output_path, name=hparams.experiment_name
 )
-csv_logger = CSVLogger(
-    save_dir=hparams.output_path,
-    name=hparams.experiment_name
-)
+csv_logger = CSVLogger(save_dir=hparams.output_path, name=hparams.experiment_name)
 checkpoint_callback = ModelCheckpoint(
-    filepath=os.path.join(tb_logger.root_dir, 'best-{epoch}-{val_acc:.4f}'),
+    dirpath=tb_logger.root_dir,
+    filename="best-{epoch}-{val_acc:.4f}",
     save_top_k=1,
     verbose=True,
-    monitor='val_acc',
-    mode='max',
+    monitor="val_acc",
+    mode="max",
     save_last=True,
 )
 
@@ -47,8 +47,8 @@ model = Model(hparams)
 # Run trainer
 trainer = pl.Trainer.from_argparse_args(
     args,
-    #resume_from_checkpoint=hparams.checkpoint if hparams.checkpoint else None,
-    checkpoint_callback=checkpoint_callback,
+    # resume_from_checkpoint=hparams.checkpoint if hparams.checkpoint else None,
+    callbacks=[checkpoint_callback],
     logger=[tb_logger, csv_logger],
 )
 
