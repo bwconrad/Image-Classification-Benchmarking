@@ -1,0 +1,9 @@
+experiment_name: efficientnet-b0-baseline
+dataset: cifar10
+arch: efficientnet-b0
+transforms: standard
+training: vanilla
+epochs: 200
+schedule: cosine
+weight_init: kaiming
+size: 224

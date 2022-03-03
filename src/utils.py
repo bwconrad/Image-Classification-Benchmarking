@@ -12,8 +12,8 @@ warnings.filterwarnings(
     message="Please also save or load the state of the optimizer when saving or loading the scheduler.",
 )
 
-from adabelief_pytorch import AdaBelief
-from ranger_adabelief import RangerAdaBelief
+# from adabelief_pytorch import AdaBelief
+# from ranger_adabelief import RangerAdaBelief
 
 from .optim.ranger import Ranger
 
@@ -49,38 +49,38 @@ def get_optimizer(parameters, hparams):
             weight_decay=hparams.weight_decay,
             use_gc=hparams.ranger_gc,
         )
-    elif name == "adabelief":
-        print("Using AdaBelief optimizer")
-        return AdaBelief(
-            parameters,
-            lr=hparams.lr,
-            weight_decay=hparams.weight_decay,
-            eps=hparams.belief_eps,
-            betas=(hparams.beta1, hparams.beta2),
-            weight_decouple=hparams.belief_weight_decouple,
-            rectify=hparams.belief_recitfy,
-            amsgrad=hparams.belief_amsgrad,
-            fixed_decay=hparams.belief_fixed_decay,
-        )
-    elif name == "ranger_adabelief":
-        print("Using RangerAdaBelief optimizer")
-        return RangerAdaBelief(
-            parameters,
-            lr=hparams.lr,
-            alpha=hparams.ranger_alpha,
-            k=hparams.ranger_k,
-            betas=(hparams.beta1, hparams.beta2),
-            weight_decay=hparams.weight_decay,
-            use_gc=hparams.ranger_gc,
-            adabelief=True,
-        )
+    # elif name == "adabelief":
+    #     print("Using AdaBelief optimizer")
+    #     return AdaBelief(
+    #         parameters,
+    #         lr=hparams.lr,
+    #         weight_decay=hparams.weight_decay,
+    #         eps=hparams.belief_eps,
+    #         betas=(hparams.beta1, hparams.beta2),
+    #         weight_decouple=hparams.belief_weight_decouple,
+    #         rectify=hparams.belief_recitfy,
+    #         amsgrad=hparams.belief_amsgrad,
+    #         fixed_decay=hparams.belief_fixed_decay,
+    #     )
+    # elif name == "ranger_adabelief":
+    #     print("Using RangerAdaBelief optimizer")
+    #     return RangerAdaBelief(
+    #         parameters,
+    #         lr=hparams.lr,
+    #         alpha=hparams.ranger_alpha,
+    #         k=hparams.ranger_k,
+    #         betas=(hparams.beta1, hparams.beta2),
+    #         weight_decay=hparams.weight_decay,
+    #         use_gc=hparams.ranger_gc,
+    #         adabelief=True,
+    #     )
 
     else:
         raise NotImplementedError(f"{name} is not an available optimizer")
 
 
 class DelayerScheduler(lr_scheduler._LRScheduler):
-    """ From: https://github.com/pabloppp/pytorch-tools/blob/master/torchtools/lr_scheduler/delayed.py """
+    """From: https://github.com/pabloppp/pytorch-tools/blob/master/torchtools/lr_scheduler/delayed.py"""
 
     """ Starts with a flat lr schedule until it reaches N epochs the applies a scheduler 
     Args:
@@ -232,4 +232,3 @@ default_hparams = {
     "belief_amsgrad": False,
     "belief_fixed_decay": False,
 }
-

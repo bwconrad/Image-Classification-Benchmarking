@@ -1,8 +1,10 @@
+from functools import partial
+
 import pytorch_lightning as pl
 import torch
 from torch.utils.data import DataLoader
 from torchvision import transforms
-from torchvision.datasets import CIFAR10, CIFAR100
+from torchvision.datasets import CIFAR10, CIFAR100, ImageFolder
 
 from .augments.augmix import AugMix
 from .augments.autoaugment import CIFAR10Policy
@@ -19,6 +21,77 @@ def get_datamodule(hparams):
     else:
         raise NotImplementedError(
             "{} is not an available dataset".format(hparams.dataset)
+        )
+
+
+class ImageNet100DataModule(pl.LightningDataModule):
+    def __init__(self, hparams):
+        super(ImageNet100DataModule, self).__init__()
+        self.params = hparams
+        self.data_dir = self.params.data_path
+        hparams.size = 224
+        self.dims = (3, hparams.size, hparams.size)
+        self.n_classes = 100
+
+        self.train_transforms = transforms.Compose(
+            [
+                transforms.RandomResizedCrop(224),
+                transforms.RandomHorizontalFlip(),
+                transforms.ToTensor(),
+                transforms.Normalize(
+                    mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
+                ),
+            ]
+        )
+        self.test_transforms = transforms.Compose(
+            [
+                transforms.Resize(256),
+                transforms.CenterCrop(224),
+                transforms.ToTensor(),
+                transforms.Normalize(
+                    mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
+                ),
+            ]
+        )
+
+    def setup(self, stage="fit"):
+        if stage == "fit":
+            self.train_dataset = ImageFolder(
+                f"{ self.data_dir }/train/", transform=self.train_transforms
+            )
+            self.val_dataset = ImageFolder(
+                f"{ self.data_dir }/val/", transform=self.test_transforms
+            )
+        elif stage == "test":
+            self.test_dataset = ImageFolder(
+                f"{self.data_dir}/val/", transform=self.test_transforms
+            )
+
+    def train_dataloader(self):
+        return DataLoader(
+            self.train_dataset,
+            batch_size=self.params.batch_size,
+            shuffle=True,
+            num_workers=self.params.workers,
+            pin_memory=True,
+        )
+
+    def val_dataloader(self):
+        return DataLoader(
+            self.val_dataset,
+            batch_size=self.params.batch_size,
+            shuffle=False,
+            num_workers=self.params.workers,
+            pin_memory=True,
+        )
+
+    def test_dataloader(self):
+        return DataLoader(
+            self.test_dataset,
+            batch_size=self.params.batch_size,
+            shuffle=False,
+            num_workers=self.params.workers,
+            pin_memory=True,
         )
 
 
@@ -163,7 +236,7 @@ class CIFAR100DataModule(pl.LightningDataModule):
 
 
 class PathMNISTDataModule(pl.LightningDataModule):
-    def __init__(self, hparams):
+    def __init__(self, hparams, n_classes):
         super(PathMNISTDataModule, self).__init__()
         self.params = hparams
         self.data_dir = self.params.data_path
@@ -171,7 +244,7 @@ class PathMNISTDataModule(pl.LightningDataModule):
             hparams.size if hparams.size != 0 else 32
         )  # If size=0, default to 32
         self.dims = (3, hparams.size, hparams.size)
-        self.n_classes = 10
+        self.n_classes = n_classes
 
         self.train_transforms = get_transforms(mean=[0.5], std=[0.5], **vars(hparams))
         self.test_transforms = transforms.Compose(
@@ -372,5 +445,6 @@ def get_transforms(mean, std, size, padding, **kwargs):
 datamodule_dict = {
     "cifar10": CIFAR10DataModule,
     "cifar100": CIFAR100DataModule,
-    "pathmnist": PathMNISTDataModule,
+    "pathmnist": partial(PathMNISTDataModule, n_classes=9),
+    "imagenet100": ImageNet100DataModule,
 }

@@ -1,0 +1,16 @@
+dataset: pathmnist
+size: 32
+padding: 4
+transforms: standard # none | standard | cutout | autoaugment | autoaugment_cutout | randaugment | randaugment_cutout | gridmask | autoaugment_gridmask | augmix
+training: vanilla # vanilla | mixup |  cutmix 
+smoothing: 0 # [0,1]
+optimizer: adam  # sgd | adam | ranger | adabelief | ranger_adabelief
+batch_size: 128
+workers: 4
+lr: 0.001
+momentum: 0.9  
+epochs: 100 
+schedule: none # none | step | cosine | flatcosine
+steps: [50, 75] # List 
+step_size: 0.1 # [0,1] 
+

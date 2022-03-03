@@ -133,7 +133,7 @@ class Model(pl.LightningModule):
 
     def _cutmix(self, x, y):
         def rand_bbox(size, lam):
-            """ From: https://github.com/clovaai/CutMix-PyTorch/blob/master/train.py """
+            """From: https://github.com/clovaai/CutMix-PyTorch/blob/master/train.py"""
             W = size[2]
             H = size[3]
             cut_rat = np.sqrt(1.0 - lam)

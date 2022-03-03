@@ -61,7 +61,7 @@ cutout_n_holes: 1
 # Network architecture
 arch: preactresnet18  # preactresnet18 | preactresnet34 | preactresnet50 | preactresnet101 | preactresnet152
 # Weight initialization distribution for convolution and linear layers
-weight_init: normal # normal | xavier | kaiming | orthogonal
+weight_init: normal # normal | xavier | kaiming | orthogonal | default
 # Standard deviation of normal distribution (weight_init = normal)
 weight_init_gain: 0.02 
 
